@@ -14,22 +14,16 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  try {
-    const formData = await request.formData();
-    const cite = formData.get("cite") as string;
-    const auteur = formData.get("auteur") as string;
 
-    if (!cite || !auteur) {
-      return NextResponse.json({ error: "citation or author is required" }, { status: 400 });
-    }
+    const json = await request.json();
+    await new Promise((r)=>setTimeout(r,1000))
 
     const newCitation = await prisma.citations.create({
-      data: { cite, auteur },
-    });
+      data: {
+        auteur: json.auteur,
+        cite: json.cite
+      }
 
-    return NextResponse.json(newCitation, { status: 201 });
-  } catch (error) {
-    console.error("failed to create citation", error);
-    return NextResponse.json({ error: "failed to create citation" }, { status: 500 });
-  }
+    });
+    return NextResponse.json({citation: newCitation,} );
 }

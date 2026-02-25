@@ -16,6 +16,7 @@ export async function GET() {
 export async function POST(request: Request) {
 
     const json = await request.json();
+    console.log(json);
     await new Promise((r)=>setTimeout(r,1000))
 
     const newCitation = await prisma.citations.create({
@@ -26,4 +27,5 @@ export async function POST(request: Request) {
 
     });
     return NextResponse.json({citation: newCitation,} );
+    
 }
